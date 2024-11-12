@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PromoCodeFactory.Core.Abstractions.Repositories;
 using PromoCodeFactory.Core.Domain;
+using PromoCodeFactory.Core.Domain.Administration;
 namespace PromoCodeFactory.DataAccess.Repositories
 {
     public class InMemoryRepository<T>: IRepository<T> where T: BaseEntity
@@ -23,6 +24,21 @@ namespace PromoCodeFactory.DataAccess.Repositories
         public Task<T> GetByIdAsync(Guid id)
         {
             return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
+        }
+
+        public async Task<T> PostNewEmployee(Employee emp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> PutEmployee(Employee emp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<T> DeleteEmployeee(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
