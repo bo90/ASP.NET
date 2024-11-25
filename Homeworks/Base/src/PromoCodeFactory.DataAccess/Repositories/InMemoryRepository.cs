@@ -9,6 +9,7 @@ namespace PromoCodeFactory.DataAccess.Repositories
 {
     public class InMemoryRepository<T>: IRepository<T> where T: BaseEntity
     {
+        
         protected IEnumerable<T> Data { get; set; }
 
         public InMemoryRepository(IEnumerable<T> data)
@@ -26,19 +27,23 @@ namespace PromoCodeFactory.DataAccess.Repositories
             return Task.FromResult(Data.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task<T> PostNewEmployee(Employee emp)
+        public Task CreateNewEmployeeAsync(T emp)
         {
-            throw new NotImplementedException();
+            var newRec = Data.Append(emp);
+            Data = newRec;
+            return Task.FromResult(Data);
         }
 
-        public Task<T> PutEmployee(Employee emp)
+        public Task UpdateEmployeeAsync(T emp)
         {
-            throw new NotImplementedException();
+            Data = Data.Where(x=> x.Id != emp.Id).Append(emp);
+            return Task.CompletedTask;
         }
 
-        public Task<T> DeleteEmployeee(Guid id)
+        public Task DeleteEmployeeAsync(Guid id)
         {
-            throw new NotImplementedException();
+            Data = Data.Where(x => x.Id != id);
+            return Task.CompletedTask;
         }
     }
 }
