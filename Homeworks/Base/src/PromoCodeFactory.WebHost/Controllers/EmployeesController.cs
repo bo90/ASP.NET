@@ -71,6 +71,11 @@ namespace PromoCodeFactory.WebHost.Controllers
             return employeeModel;
         }
 
+        /// <summary>
+        /// Создать новую запись сотрудника
+        /// </summary>
+        /// <param name="emp"></param>
+        /// <returns></returns>
         [HttpPost(Name = "AddNewEmployee")]
         public async Task<ActionResult> AddNewEmployee(Employee emp)
         {
@@ -78,13 +83,32 @@ namespace PromoCodeFactory.WebHost.Controllers
                 return NotFound();
 
             var empExists = _employeeRepository.GetByIdAsync(emp.Id);
-            if(empExists != null) 
+            if(empExists.Result != null) 
                 return BadRequest($"Employee exists");
 
-            await _employeeRepository.PostNewEmployee(emp);
-            return Ok();
+            if (emp.Id.Equals(Guid.Empty))
+            {
+                emp.Id = Guid.NewGuid();
+                emp.Roles = new List<Role>()
+                {
+                    new Role()
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = "Test",
+                        Description = "TestDescription"
+                    }
+                };
+            }
+            
+            await _employeeRepository.CreateNewEmployeeAsync(emp);
+            return Ok(emp);
         }
-
+        
+        /// <summary>
+        /// Обновить запись сотрудника
+        /// </summary>
+        /// <param name="emp"></param>
+        /// <returns></returns>
         [HttpPut(Name = "UpdateEmployee")]
         public async Task<ActionResult> UpdateEmployee(Employee emp)
         {
@@ -94,17 +118,16 @@ namespace PromoCodeFactory.WebHost.Controllers
             var checkEmp = await _employeeRepository.GetByIdAsync(emp.Id);
             if(checkEmp == null)
                 return NotFound();
-            try
-            {
-                await _employeeRepository.PutEmployee(emp);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
+            await _employeeRepository.UpdateEmployeeAsync(emp);
             return Ok();
         }
 
+        /// <summary>
+        /// Удалить запись сотрудника по его ID 
+        /// </summary>
+        /// <param name="id">GUID ID</param>
+        /// <returns></returns>
         [HttpDelete("{id:guid}", Name = "DeleteEmployee")]
         public async Task<ActionResult> DeleteEmployee(Guid id)
         {
@@ -112,7 +135,7 @@ namespace PromoCodeFactory.WebHost.Controllers
             if(emp == null)
                 return NotFound();
 
-            await _employeeRepository.DeleteEmployeee(id);
+            await _employeeRepository.DeleteEmployeeAsync(id);
             return Ok();
         }
     }

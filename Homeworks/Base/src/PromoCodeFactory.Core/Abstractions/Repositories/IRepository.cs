@@ -12,10 +12,11 @@ namespace PromoCodeFactory.Core.Abstractions.Repositories
 
         Task<T> GetByIdAsync(Guid id);
 
-        Task<T> PostNewEmployee(Employee emp);
+        Task CreateNewEmployeeAsync(T emp);
 
-        Task<T> PutEmployee(Employee emp);
+        Task UpdateEmployeeAsync(T emp);
 
-        Task<T> DeleteEmployeee(Guid id);
+        Task DeleteEmployeeAsync(Guid id);
+        
     }
 }
