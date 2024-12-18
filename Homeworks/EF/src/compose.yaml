@@ -1,0 +1,20 @@
+﻿
+
+services:
+  promocodefactory.webhost:
+    image: promocodefactory.webhost
+    build:
+      context: .
+      dockerfile: PromoCodeFactory.WebHost/Dockerfile
+      
+  database:
+    image: "postgres"
+    volumes:
+      - ./docker/database/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER : root
+      POSTGRES_DB: db
+    ports:
+      - 5432:5432
+    
