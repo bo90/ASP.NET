@@ -25,8 +25,8 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore src/${{ env.prj_n }}/${{ env.prj_n }}.csproj
+      run: dotnet restore Homeworks/UnitTests/src/${{ env.prj_n }}/${{ env.prj_n }}.csproj
     - name: Build
-      run: dotnet build src/${{ env.prj_n }}/${{ env.prj_n }}.csproj  --no-restore
+      run: dotnet build Homeworks/UnitTests/src/${{ env.prj_n }}/${{ env.prj_n }}.csproj  --no-restore
     - name: Test
-      run: dotnet test src/${{ env.prj_test }}/${{ env.prj_test }}.csproj --no-build --verbosity normal
+      run: dotnet test Homeworks/UnitTests/src/${{ env.prj_test }}/${{ env.prj_test }}.csproj --no-build --verbosity normal
