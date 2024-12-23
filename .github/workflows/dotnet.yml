@@ -29,4 +29,4 @@ jobs:
     - name: Build
       run: dotnet build src/${{ env.prj_n }}/${{ env.prj_n }}.csproj  --no-restore
     - name: Test
-      run: dotnet test src/${{ env.prj_n }}/${{ env.prj_n }}.csproj --no-build --verbosity normal
+      run: dotnet test src/${{ env.prj_test }}/${{ env.prj_test }}.csproj --no-build --verbosity normal
