@@ -28,6 +28,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ${{ env.home_dir}}/${{ env.prj_n }}/${{ env.prj_n }}.csproj
     - name: Build
-      run: dotnet build Homeworks/UnitTests/src/${{ env.prj_n }}/${{ env.prj_n }}.csproj  --no-restore
+      run: dotnet build ${{ env.home_dir}}/${{ env.prj_n }}/${{ env.prj_n }}.csproj  --no-restore
     #- name: Test
     #  run: dotnet test Homeworks/UnitTests/src/${{ env.prj_test }}/${{ env.prj_test }}.csproj --no-build --verbosity normal
