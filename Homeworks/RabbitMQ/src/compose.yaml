@@ -1,0 +1,13 @@
+﻿services:
+  pcf.receivingfrompartner.webhost:
+    image: pcf.receivingfrompartner.webhost
+    build:
+      context: .
+      dockerfile: Pcf.ReceivingFromPartner/Pcf.ReceivingFromPartner.WebHost/Dockerfile
+    
+  #RabbitmMq
+  rabbit-edu:
+    image: "rabbitmq:3.13.7-management"
+    container_name: RMQBroker
+    ports:
+      - 27045:27020

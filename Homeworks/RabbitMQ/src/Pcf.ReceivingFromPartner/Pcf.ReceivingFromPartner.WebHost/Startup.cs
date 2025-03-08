@@ -8,10 +8,13 @@ using Microsoft.Extensions.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using Pcf.ReceivingFromPartner.Core.Abstractions.Repositories;
 using Pcf.ReceivingFromPartner.Core.Abstractions.Gateways;
+using Pcf.ReceivingFromPartner.Core.Consumers;
 using Pcf.ReceivingFromPartner.DataAccess;
 using Pcf.ReceivingFromPartner.DataAccess.Repositories;
 using Pcf.ReceivingFromPartner.DataAccess.Data;
 using Pcf.ReceivingFromPartner.Integration;
+using Pcf.ReceivingFromPartner.WebHost.Settings;
+using RabbitMQ.Client;
 
 namespace Pcf.ReceivingFromPartner.WebHost
 {
@@ -59,6 +62,7 @@ namespace Pcf.ReceivingFromPartner.WebHost
                 options.Title = "PromoCode Factory Receiving From Partner API Doc";
                 options.Version = "1.0";
             });
+            RabbitGetMessage();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,6 +93,30 @@ namespace Pcf.ReceivingFromPartner.WebHost
             });
 
             dbInitializer.InitializeDb();
+        }
+
+        private void RabbitGetMessage()
+        {
+            IConfiguration configuration = new  ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+            var connection = GetRabbitConnection(configuration);
+            var channel = connection.CreateModel();
+            PromocodeConsumer.Register(channel,"Promocode", "Code1", "Promocode.1" );
+            
+        }
+        
+        private static IConnection GetRabbitConnection(IConfiguration configuration)
+        {
+            var rmqSettings = configuration.Get<ApplicationSettings>().RmqSettings;
+            ConnectionFactory factory = new ConnectionFactory
+            {
+                HostName = rmqSettings.Host,
+                VirtualHost = rmqSettings.VHost,
+                UserName = rmqSettings.Login,
+                Password = rmqSettings.Password
+            };
+            return factory.CreateConnection();
         }
     }
 }
